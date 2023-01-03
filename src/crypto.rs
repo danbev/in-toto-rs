@@ -710,6 +710,18 @@ impl PublicKey {
         )
     }
 
+    /// Parse PEM as an SPKI key.
+    ///
+    /// See the documentation on `KeyValue` for more information on SPKI.
+    pub fn from_pem_spki(pem: &str, scheme: SignatureScheme) -> Result<Self> {
+        let der_bytes = pem::parse(pem).unwrap();
+        Self::from_spki_with_keyid_hash_algorithms(
+            &der_bytes.contents,
+            scheme,
+            python_sslib_compatibility_keyid_hash_algorithms(),
+        )
+    }
+
     /// Parse DER bytes as an SPKI key and the `keyid_hash_algorithms`.
     ///
     /// See the documentation on `KeyValue` for more information on SPKI.
